@@ -22,7 +22,7 @@ const Options = styled.select`
   border: none;
 `;
 
-const useCoin = (label, initialState, options) => {
+const useCrypto = (label, initialState, options) => {
   //Custom Hook State
   const [state, setState] = useState({ initialState });
 
@@ -32,8 +32,8 @@ const useCoin = (label, initialState, options) => {
       <Options onChange={(e) => setState(e.target.value)} value={state}>
         <option value="">--Select your option--</option>
         {options.map((option) => (
-          <option key={option.code} value={option.code}>
-            {option.name}
+          <option key={option.CoinInfo.Id} value={option.CoinInfo.Name}>
+            {option.CoinInfo.FullName}
           </option>
         ))}
       </Options>
@@ -43,4 +43,4 @@ const useCoin = (label, initialState, options) => {
   return [state, Select, setState];
 };
 
-export default useCoin;
+export default useCrypto;
