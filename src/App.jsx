@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
+import axios from "axios";
 import CryptoImage from "../src/cryptocurrencies-image.png";
 import Form from "./components/Form.jsx";
 
@@ -37,6 +38,26 @@ const Heading = styled.div`
 `;
 
 function App() {
+  const [coins, setCoins] = useState("");
+  const [cryptos, setCryptos] = useState("");
+  const [result, setResult] = useState({});
+
+  useEffect(() => {
+    const quotingCryptocurrencie = async () => {
+      //avoiding not execute function if coins and cryptos states are empty
+      if (coins === "" || cryptos === "") return;
+
+      //consulting API to obtain quote
+      const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${cryptos}&tsyms=${coins}`;
+      const res = await axios.get(url);
+
+      setResult(res.data.DISPLAY[cryptos][coins]);
+    };
+
+    quotingCryptocurrencie();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coins, cryptos]);
+
   return (
     <Container>
       <div>
@@ -44,7 +65,7 @@ function App() {
       </div>
       <div>
         <Heading>Quote your Cryptocurrencies Now!</Heading>
-        <Form />
+        <Form setCoins={setCoins} setCryptos={setCryptos} />
       </div>
     </Container>
   );

@@ -23,7 +23,7 @@ const Button = styled.button`
   }
 `;
 
-const Form = () => {
+const Form = ({ setCoins, setCryptos }) => {
   const [listcrypto, Setlistcrypto] = useState([]);
   const [error, setError] = useState(false);
 
@@ -58,13 +58,16 @@ const Form = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(coin);
     if (coin.initialState === "" || crypto.initialState === "") {
       setError(true);
       return;
     }
 
     setError(false);
+
+    //setting new states for coin and state on App
+    setCoins(coin);
+    setCryptos(crypto);
   };
 
   return (
