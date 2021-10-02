@@ -3,6 +3,8 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import CryptoImage from "../src/cryptocurrencies-image.png";
 import Form from "./components/Form.jsx";
+import Quote from "./components/Quote";
+import Spinner from "./Spinner/Spinner";
 
 const Container = styled.div`
   max-width: 900px;
@@ -41,6 +43,7 @@ function App() {
   const [coins, setCoins] = useState("");
   const [cryptos, setCryptos] = useState("");
   const [result, setResult] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const quotingCryptocurrencie = async () => {
@@ -51,12 +54,22 @@ function App() {
       const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${cryptos}&tsyms=${coins}`;
       const res = await axios.get(url);
 
-      setResult(res.data.DISPLAY[cryptos][coins]);
+      setLoading(true);
+
+      setTimeout(() => {
+        //setting loading state to false
+        setLoading(false);
+
+        //Saving results in the state
+        setResult(res.data.DISPLAY[cryptos][coins]);
+      }, 3000);
     };
 
     quotingCryptocurrencie();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coins, cryptos]);
+
+  const LoadingComponent = loading ? <Spinner /> : <Quote result={result} />;
 
   return (
     <Container>
@@ -66,6 +79,7 @@ function App() {
       <div>
         <Heading>Quote your Cryptocurrencies Now!</Heading>
         <Form setCoins={setCoins} setCryptos={setCryptos} />
+        {LoadingComponent}
       </div>
     </Container>
   );
